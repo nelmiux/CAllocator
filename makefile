@@ -75,7 +75,7 @@ Doxyfile:
 	doxygen -g
 
 TestAllocator: Allocator.h TestAllocator.c++
-	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Allocator.c++ TestAllocator.c++ -o TestAllocator $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) TestAllocator.c++ -o TestAllocator $(LDFLAGS)
 
 TestAllocator.out: TestAllocator
 	$(VALGRIND) ./TestAllocator                                       >  TestAllocator.out 2>&1
