@@ -1,16 +1,10 @@
 FILES :=                              \
     .travis.yml                       \
-    allocator-tests/np8259-RunAllocator.in   \
-    allocator-tests/np8259-RunAllocator.out  \
-    allocator-tests/np8259-TestAllocator.c++ \
-    allocator-tests/np8259-TestAllocator.out \
-    Allocator.c++                       \
+    #allocator-tests/np8259-TestAllocator.c++ \
+    #allocator-tests/np8259-TestAllocator.out \
     Allocator.h                         \
     Allocator.log                       \
     html                              \
-    RunAllocator.c++                    \
-    RunAllocator.in                     \
-    RunAllocator.out                    \
     TestAllocator.c++                   \
     TestAllocator.out
 
@@ -46,8 +40,6 @@ clean:
 	rm -f *.gcda
 	rm -f *.gcno
 	rm -f *.gcov
-	rm -f RunAllocator
-	rm -f RunAllocator.out
 	rm -f TestAllocator
 	rm -f TestAllocator.out
 
@@ -68,12 +60,12 @@ status:
 	git remote -v
 	git status
 
-test: RunAllocator.out TestAllocator.out
+test: TestAllocator.out
 
 allocator-tests:
 	git clone https://github.com/cs371p-fall-2015/allocator-tests.git
 
-html: Doxyfile Allocator.h Allocator.c++ RunAllocator.c++ TestAllocator.c++
+html: Doxyfile Allocator.h TestAllocator.c++
 	doxygen Doxyfile
 
 Allocator.log:
@@ -82,17 +74,10 @@ Allocator.log:
 Doxyfile:
 	doxygen -g
 
-RunAllocator: Allocator.h Allocator.c++ RunAllocator.c++
-	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Allocator.c++ RunAllocator.c++ -o RunAllocator
-
-RunAllocator.out: RunAllocator
-	./RunAllocator < RunAllocator.in > RunAllocator.out
-
-TestAllocator: Allocator.h Allocator.c++ TestAllocator.c++
-	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) Allocator.c++ TestAllocator.c++ -o TestAllocator $(LDFLAGS)
+TestAllocator: Allocator.h TestAllocator.c++
+	$(CXX) $(CXXFLAGS) $(GCOVFLAGS) TestAllocator.c++ -o TestAllocator $(LDFLAGS)
 
 TestAllocator.out: TestAllocator
 	$(VALGRIND) ./TestAllocator                                       >  TestAllocator.out 2>&1
-	$(GCOV) -b Allocator.c++     | grep -A 5 "File 'Allocator.c++'"     >> TestAllocator.out
 	$(GCOV) -b TestAllocator.c++ | grep -A 5 "File 'TestAllocator.c++'" >> TestAllocator.out
 	cat TestAllocator.out
