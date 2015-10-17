@@ -252,7 +252,7 @@ TEST(TestAllocator4, allocate_5) {
     typedef Allocator<int, 100>::pointer pointer;
     Allocator<int, 100> x;
     try {
-        const p = x.allocate(s);
+        const pointer p = x.allocate(s);
     } 
     catch (bad_alloc &e){
         my_catch = "There is not enough space for allocation";
