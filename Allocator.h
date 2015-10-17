@@ -15,6 +15,9 @@
 #include <cstddef>   // ptrdiff_t, size_t
 #include <new>       // bad_alloc, new
 #include <stdexcept> // invalid_argument
+#include <typeinfo>
+
+using namespace std;
 
 // ---------
 // Allocator
@@ -70,7 +73,7 @@ class Allocator {
          * <your documentation>
          */
         bool valid () const {
-            // <your code>
+            //return (!b && !e && !_l) || ((_b <= _e) && (_e <= _l));}
             return true;}
 
         /**
@@ -80,8 +83,8 @@ class Allocator {
          * https://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
          */
         FRIEND_TEST(TestAllocator2, index);
-        int& operator [] (int i) {
-            return *reinterpret_cast<int*>(&a[i]);}
+        /*int& operator [] (int i) {
+            return *reinterpret_cast<int*>(&a[i]);}*/
 
     public:
         // ------------
@@ -94,8 +97,16 @@ class Allocator {
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
         Allocator () {
-            (*this)[0] = 0; // replace!
-            // <your code>
+            try {
+                if (N < (sizeof(T) + (2 * sizeof(int))))
+                    throw bad_alloc();
+                (*this)[0] = N - (2 * sizeof(int));
+                (*this)[N - sizeof(int)] = N - (2 * sizeof(int)); }
+            catch (bad_alloc &e) {
+                (*this)[0] = 0;
+                cout << e.what() << " - There is not enough space for allocation" << "\n";
+                exit(-1);
+            }
             assert(valid());}
 
         // Default copy, destructor, and copy assignment
@@ -116,9 +127,46 @@ class Allocator {
          * throw a bad_alloc exception, if n is invalid
          */
         pointer allocate (size_type n) {
-            // <your code>
-            assert(valid());
-            return nullptr;}             // replace!
+
+            const int space_needed = (n * sizeof(T)) + (2 * (sizeof(int)));
+
+            if ((n < 0) || (N < space_needed) || (sizeof(T) < 1))
+                    throw bad_alloc();
+            else if (n ==  0)
+                return 0;
+
+            const int data_space_needed = n * sizeof(T);
+            int i = 0;
+
+            while (i < N) { 
+
+                int& front_sentinel = (*this)[i];
+                int positive_sentinel = front_sentinel < 0 ? (-1 * front_sentinel) : front_sentinel;
+                int& back_sentinel = (*this)[i + positive_sentinel + sizeof(int)];
+                
+                if (front_sentinel != back_sentinel)
+                    throw bad_alloc();
+
+                if (front_sentinel == data_space_needed) {
+                    front_sentinel = back_sentinel = (-1 * data_space_needed);
+                    break;
+                }
+
+                if (front_sentinel > space_needed) {
+                    front_sentinel = (-1 * data_space_needed);
+                    back_sentinel = back_sentinel - space_needed;
+                    (*this)[i + data_space_needed + sizeof(int)] = front_sentinel;
+                    (*this)[i + space_needed] = back_sentinel;
+                    break;
+                }
+                i = i + positive_sentinel + 2 * sizeof(int); 
+            }
+
+            if (i >= N)
+                return 0;
+
+            return reinterpret_cast<pointer>(&a[i + sizeof(int)]);}
+            
 
         // ---------
         // construct
@@ -144,8 +192,66 @@ class Allocator {
          * <your documentation>
          */
         void deallocate (pointer p, size_type) {
-            // <your code>
+
+            if (p == 0)
+                return;
+
+            char* _p = (char*)p;
+            
+            if ((_p < &a[sizeof(int)]) || (_p > &a[N - sizeof(int)] - 1))
+                throw invalid_argument("Invalid pointer: Pointer is not inside pool");
+            
+            int& front_sentinel = *reinterpret_cast<int*>(_p - sizeof(int));            
+            int positive_sentinel = front_sentinel < 0 ? (-1 * front_sentinel) : front_sentinel;
+            int total_sentinel = positive_sentinel;
+            int& back_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel);
+            int& prev_back_sentinel = *reinterpret_cast<int*>(_p - (2 * sizeof(int)));
+            int& prev_front_sentinel = *reinterpret_cast<int*>((_p - (3 * sizeof(int)) - prev_back_sentinel));
+            bool done = false;
+            
+            if (front_sentinel != back_sentinel)
+                throw invalid_argument("Invalid pointer: Pointer is not valid starting address block");
+
+            if ((_p - (3 * sizeof(int))) > &a[0]) {
+
+                if (prev_back_sentinel >= 0) {
+                    
+                    cout << "prev: " << prev_back_sentinel << "\n";
+                    total_sentinel = prev_back_sentinel + (2 * sizeof(int) + positive_sentinel);
+                    cout << "total: " << total_sentinel << "\n";
+                    prev_front_sentinel = total_sentinel;
+                    cout << "front: " << prev_front_sentinel << "\n";
+                    back_sentinel = total_sentinel;
+                    cout << "back: " << back_sentinel << "\n";
+                    done = true;
+                }
+            }
+
+            if ((_p + positive_sentinel + (3 * sizeof(int))) <= &a[N]) {
+
+                int& next_front_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel + sizeof(int));
+                
+                if ((next_front_sentinel) >= 0) {
+                    total_sentinel = total_sentinel + (2 * sizeof(int) + next_front_sentinel);
+                    int& next_back_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel + (sizeof(int)) + next_front_sentinel);
+                    if (done) {
+                        prev_front_sentinel = total_sentinel;
+                    }
+                    else front_sentinel = total_sentinel;
+                    next_back_sentinel = total_sentinel;
+                    cout << "next: " << next_back_sentinel << "\n";
+                    cout << "total: " << total_sentinel << "\n";
+                    done = true;
+                }
+            }
+
+            if (!done) {
+                front_sentinel = total_sentinel;
+                back_sentinel = total_sentinel;
+            }
+
             assert(valid());}
+            
 
         // -------
         // destroy
