@@ -95,10 +95,27 @@ class Allocator {
         /**
          * O(1) in space
          * O(1) in time
-         * <your documentation>
+         * Tests definitions to be able to access to private methods
+         * throught test, in this case to access to the [] operator
+         * on my tests
          * https://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
          */
         FRIEND_TEST(TestAllocator2, index);
+        
+        FRIEND_TEST(TestAllocator4, allocate_1);
+        FRIEND_TEST(TestAllocator4, allocate_2);
+        FRIEND_TEST(TestAllocator4, allocate_3);
+        FRIEND_TEST(TestAllocator4, allocate_4);
+        FRIEND_TEST(TestAllocator4, allocate_5);
+        FRIEND_TEST(TestAllocator4, allocate_5);
+        FRIEND_TEST(TestAllocator4, deallocate_1);
+        FRIEND_TEST(TestAllocator4, deallocate_2);
+        FRIEND_TEST(TestAllocator4, deallocate_3);
+        FRIEND_TEST(TestAllocator4, deallocate_4);
+        FRIEND_TEST(TestAllocator4, Allocator_1);
+        FRIEND_TEST(TestAllocator4, Allocator_2);
+        FRIEND_TEST(TestAllocator4, Allocator_3);
+
         int& operator [] (int i) {
             return *reinterpret_cast<int*>(&a[i]);}
 
@@ -113,16 +130,12 @@ class Allocator {
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
         Allocator () {
-            try {
-                if (N < (sizeof(T) + (2 * sizeof(int))))
-                    throw bad_alloc();
-                (*this)[0] = N - (2 * sizeof(int));
-                (*this)[N - sizeof(int)] = N - (2 * sizeof(int)); }
-            catch (bad_alloc &e) {
-                (*this)[0] = 0;
-                cout << e.what() << " - There is not enough space for allocation" << "\n";
-                exit(-1);
-            }
+
+            if (N < (sizeof(T) + (2 * sizeof(int))))
+                throw bad_alloc();
+            (*this)[0] = N - (2 * sizeof(int));
+            (*this)[N - sizeof(int)] = N - (2 * sizeof(int)); 
+
             assert(valid());}
 
         // Default copy, destructor, and copy assignment
@@ -146,9 +159,10 @@ class Allocator {
 
             const int space_needed = (n * sizeof(T)) + (2 * (sizeof(int)));
 
-            if ((n < 0) || (N < space_needed) || (sizeof(T) < 1))
-                    throw bad_alloc();
-            else if (n ==  0)
+            if (N < space_needed)
+                throw bad_alloc();
+            
+            if (n ==  0)
                 return 0;
 
             const int data_space_needed = n * sizeof(T);
@@ -219,10 +233,9 @@ class Allocator {
 
             char* _p = (char*)p;
             int idx = _p - &a[0];
-            cout << "start index: " << _p - &a[0] << "\n";
             
             if ((_p < &a[sizeof(int)]) || (_p > &a[N - sizeof(int)] - 1))
-                throw invalid_argument("Invalid pointer: Pointer is not inside pool");
+                throw invalid_argument("Invalid pointer - Pointer is not inside pool");
             
             int& front_sentinel = (*this)[idx - sizeof(int)];            
             int positive_sentinel = front_sentinel < 0 ? (-1 * front_sentinel) : front_sentinel;
@@ -231,7 +244,7 @@ class Allocator {
             bool done = false;
             
             if (front_sentinel != back_sentinel)
-                throw invalid_argument("Invalid pointer: Pointer is not valid starting address block");
+                throw invalid_argument("Invalid pointer - Pointer is not valid starting address block");
 
             if ((_p - (3 * sizeof(int))) > &a[0]) {
 
