@@ -16,6 +16,7 @@
 #include <new>       // bad_alloc, new
 #include <stdexcept> // invalid_argument
 #include <typeinfo>
+#include "gtest/gtest_prod.h"
 
 using namespace std;
 
@@ -56,6 +57,7 @@ class Allocator {
         friend bool operator != (const Allocator& lhs, const Allocator& rhs) {
             return !(lhs == rhs);}
 
+
     private:
         // ----
         // data
@@ -70,10 +72,24 @@ class Allocator {
         /**
          * O(1) in space
          * O(n) in time
-         * <your documentation>
+         * Check that the front sentinel is equal to the back sentinel por block
          */
         bool valid () const {
-            //return (!b && !e && !_l) || ((_b <= _e) && (_e <= _l));}
+
+            if ((*this)[0] == 0) return false;
+
+            int positive_sentinel = 0;
+            int i = 0;
+
+            while (i < N) {
+                positive_sentinel = (*this)[i] < 0 ? (-1 * (*this)[i]) : (*this)[i];
+                /*cout << "valid_front: " << (*this)[i] << "\n";
+                cout << "valid_back: " << (*this)[i + sizeof(int) + positive_sentinel] << "\n";
+                cout << "valid_last: " << (*this)[N - sizeof(int)] << "\n";*/
+                if ((*this)[i] != (*this)[i + sizeof(int) + positive_sentinel])
+                    return false;
+                i = i + (2 * sizeof(int)) + positive_sentinel;
+            }
             return true;}
 
         /**
@@ -83,8 +99,8 @@ class Allocator {
          * https://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
          */
         FRIEND_TEST(TestAllocator2, index);
-        /*int& operator [] (int i) {
-            return *reinterpret_cast<int*>(&a[i]);}*/
+        int& operator [] (int i) {
+            return *reinterpret_cast<int*>(&a[i]);}
 
     public:
         // ------------
@@ -189,7 +205,12 @@ class Allocator {
          * O(1) in time
          * after deallocation adjacent free blocks must be coalesced
          * throw an invalid_argument exception, if p is invalid
-         * <your documentation>
+         * deallocate memory starting on the pointer passed to the method
+         * get the value of the block to deallocate and check if the prev
+         * and next block are free checking the sentinel value is positive
+         * if the adjacent blocks are free then coalesces then all in one
+         * free block making the front and the back sentinel a positive value
+         * of the size of the block, without the 2 int sizes of the sentinels
          */
         void deallocate (pointer p, size_type) {
 
@@ -197,16 +218,16 @@ class Allocator {
                 return;
 
             char* _p = (char*)p;
+            int idx = _p - &a[0];
+            cout << "start index: " << _p - &a[0] << "\n";
             
             if ((_p < &a[sizeof(int)]) || (_p > &a[N - sizeof(int)] - 1))
                 throw invalid_argument("Invalid pointer: Pointer is not inside pool");
             
-            int& front_sentinel = *reinterpret_cast<int*>(_p - sizeof(int));            
+            int& front_sentinel = (*this)[idx - sizeof(int)];            
             int positive_sentinel = front_sentinel < 0 ? (-1 * front_sentinel) : front_sentinel;
             int total_sentinel = positive_sentinel;
-            int& back_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel);
-            int& prev_back_sentinel = *reinterpret_cast<int*>(_p - (2 * sizeof(int)));
-            int& prev_front_sentinel = *reinterpret_cast<int*>((_p - (3 * sizeof(int)) - prev_back_sentinel));
+            int& back_sentinel = (*this)[idx + positive_sentinel];
             bool done = false;
             
             if (front_sentinel != back_sentinel)
@@ -214,33 +235,29 @@ class Allocator {
 
             if ((_p - (3 * sizeof(int))) > &a[0]) {
 
+                int& prev_back_sentinel = (*this)[idx - (2 * sizeof(int))];
+                
                 if (prev_back_sentinel >= 0) {
-                    
-                    cout << "prev: " << prev_back_sentinel << "\n";
+                    int& prev_front_sentinel = (*this)[idx - (3 * sizeof(int)) - prev_back_sentinel];
                     total_sentinel = prev_back_sentinel + (2 * sizeof(int) + positive_sentinel);
-                    cout << "total: " << total_sentinel << "\n";
                     prev_front_sentinel = total_sentinel;
-                    cout << "front: " << prev_front_sentinel << "\n";
                     back_sentinel = total_sentinel;
-                    cout << "back: " << back_sentinel << "\n";
                     done = true;
                 }
             }
 
-            if ((_p + positive_sentinel + (3 * sizeof(int))) <= &a[N]) {
+            if ((_p + positive_sentinel + (3 * sizeof(int))) < &a[N]) {
 
-                int& next_front_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel + sizeof(int));
+                int& next_front_sentinel = (*this)[idx + positive_sentinel + sizeof(int)];
                 
                 if ((next_front_sentinel) >= 0) {
                     total_sentinel = total_sentinel + (2 * sizeof(int) + next_front_sentinel);
-                    int& next_back_sentinel = *reinterpret_cast<int*>(_p + positive_sentinel + (sizeof(int)) + next_front_sentinel);
+                    int& next_back_sentinel = (*this)[idx + positive_sentinel + (2 * (sizeof(int))) + next_front_sentinel];
                     if (done) {
-                        prev_front_sentinel = total_sentinel;
+                        (*this)[idx - (3 * sizeof(int)) - (*this)[idx - (2 * sizeof(int))]] = total_sentinel;
                     }
                     else front_sentinel = total_sentinel;
                     next_back_sentinel = total_sentinel;
-                    cout << "next: " << next_back_sentinel << "\n";
-                    cout << "total: " << total_sentinel << "\n";
                     done = true;
                 }
             }
@@ -268,7 +285,8 @@ class Allocator {
         /**
          * O(1) in space
          * O(1) in time
-         * <your documentation>
+         * public [] operator, it is inmutable. We don't want anybody
+         * changes [] operator. 
          */
         const int& operator [] (int i) const {
             return *reinterpret_cast<const int*>(&a[i]);}};
