@@ -163,13 +163,13 @@ TYPED_TEST(TestAllocator3, test_10) {
             x.destroy(e);}
         x.deallocate(b, s);}}
 
-/*-------------------------------------------------------------------------*/
-/*                                     My Tests                            */
-/*-------------------------------------------------------------------------*/
+/**-------------------------------------------------------------------------
+ *                                     My Tests                            
+ *-------------------------------------------------------------------------*/
 
-// ----------------------------------
-// allocate() - finds first fit
-// ----------------------------------
+/** ----------------------------------
+ * allocate() - finds first fit
+ * ---------------------------------- */
 
 TEST(TestAllocator4, allocate_1) {
     int s = 5;
@@ -194,9 +194,9 @@ TEST(TestAllocator4, allocate_2) {
 }
 
 
-// ----------------------------------
-// allocate() - finds no fit
-// ----------------------------------
+/** ----------------------------------
+ * allocate() - finds no fit
+ * ----------------------------------*/
 
 TEST(TestAllocator4, allocate_3) {
     int s1 = 10;
@@ -242,9 +242,9 @@ TEST(TestAllocator4, allocate_4) {
     x.deallocate(p1, s1);
 }
 
-// ----------------------------------
-// allocate() - throws bad_alloc
-// ----------------------------------
+/** ----------------------------------
+ * allocate() - throws bad_alloc
+ * ----------------------------------*/
 
 TEST(TestAllocator4, allocate_5) {
     int s = 50;
@@ -260,9 +260,9 @@ TEST(TestAllocator4, allocate_5) {
     ASSERT_EQ(my_catch, "There is not enough space for allocation");
 }
 
-// ----------------------------------
-// allocate() - return null pointer
-// ----------------------------------
+/** ----------------------------------
+ * allocate() - return null pointer
+ * ----------------------------------*/
 
 TEST(TestAllocator4, allocate_6) {
     int s = 0;
@@ -273,9 +273,9 @@ TEST(TestAllocator4, allocate_6) {
 }
 
 
-// -------------------------------------
-// deallocate() - coalesces after block
-// -------------------------------------
+/** -------------------------------------
+ * deallocate() - coalesces after block
+ * -------------------------------------*/
 
 TEST(TestAllocator4, deallocate_1) {
     int s1 = 10;
@@ -310,9 +310,9 @@ TEST(TestAllocator4, deallocate_1) {
 }
 
 
-// -------------------------------------
-// deallocate() - coalesces before block
-// -------------------------------------
+/** -------------------------------------
+ * deallocate() - coalesces before block
+ * -------------------------------------*/
 
 TEST(TestAllocator4, deallocate_2) {
     int s1 = 10;
@@ -346,9 +346,9 @@ TEST(TestAllocator4, deallocate_2) {
     ASSERT_EQ(x[96], 92);
 }
 
-// ---------------------------------------
-// deallocate() - throws invalid_argument
-// ---------------------------------------
+/** ---------------------------------------
+ * deallocate() - throws invalid_argument
+ * ---------------------------------------*/
 
 TEST(TestAllocator4, deallocate_3) {
     int s = 50;
@@ -382,9 +382,9 @@ TEST(TestAllocator4, deallocate_4) {
     ASSERT_EQ(my_catch, "Invalid pointer - Pointer is not inside pool");
 }
 
-// ---------------------------------------
-// Allocator() - sets sentinels
-// ---------------------------------------
+/** ---------------------------------------
+ * Allocator() - sets sentinels
+ * ---------------------------------------*/
 
 TEST(TestAllocator4, Allocator_1) {
     Allocator<int, 300> x;
@@ -398,9 +398,9 @@ TEST(TestAllocator4, Allocator_2) {
     ASSERT_EQ(x[146], 142);
 }
 
-// ---------------------------------------
-// Allocator() - throws bad_alloc
-// ---------------------------------------
+/** ---------------------------------------
+ * Allocator() - throws bad_alloc
+ * ---------------------------------------*/
 
 TEST(TestAllocator4, Allocator_3) {
     string my_catch = "No bad_alloc";
