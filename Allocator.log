@@ -1,0 +1,140 @@
+commit 6c7d839db70f359eadf51d00b24050dfe0b5a963
+Author: nelmiux <npererar@utexas.edu>
+Date:   Wed Oct 21 19:35:01 2015 -0500
+
+    deleting log
+
+commit 17ccb14273fee2b9863e4f5e6768d392e6cf16a2
+Author: nelmiux <npererar@utexas.edu>
+Date:   Wed Oct 21 19:32:41 2015 -0500
+
+    log added
+    
+    Conflicts:
+    	Allocator.log
+
+commit 72b403b974d28ab7e1dd7a2da1d53cd74de9446e
+Merge: 3b006cb 37dda59
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Wed Oct 21 19:08:37 2015 -0500
+
+    Merge pull request #19 from nelmiux/dev-branch
+    
+    Final Merge
+
+commit 37dda590a724fd380e02f747007985687c2476b5
+Author: nelmiux <npererar@utexas.edu>
+Date:   Wed Oct 21 19:02:02 2015 -0500
+
+    closes #12
+
+commit dd2ab8568136e51341115cecc7f0e0b93076371f
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 04:11:00 2015 -0500
+
+    closes #9
+
+commit 8c7f74932791399ec31ad223f26728916fdac1e2
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 04:07:08 2015 -0500
+
+    closes #8
+
+commit 9b78ff9dbbf0e2e38b1233de6173ac2663d5923d
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 03:51:33 2015 -0500
+
+    Output Added
+
+commit 440c173a2c79a03027ecaab926384fcf23b2a9af
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 03:49:49 2015 -0500
+
+    Test Fixed
+
+commit 26e7816750b088d590286fcc6154c723ac97ae29
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 03:46:44 2015 -0500
+
+    closes #7
+
+commit 7526baa6dfbf8acdc522137016d6bfd5beb7ace6
+Author: nelmiux <npererar@utexas.edu>
+Date:   Fri Oct 16 23:18:37 2015 -0500
+
+    closes #18
+
+commit ab2e3fb0d13192016a3333b855943e21ce0d849c
+Author: nelmiux <npererar@utexas.edu>
+Date:   Fri Oct 16 20:29:11 2015 -0500
+
+    closes #16, #17
+
+commit 3b006cbb0542a442a6495a6be2e387aeed02608b
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:53:17 2015 -0500
+
+    Update README.md
+
+commit 3fdfa475ffe55dee7437026f9d6ca34b420129b9
+Merge: 33ff18a 8911766
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:52:47 2015 -0500
+
+    Merge pull request #13 from nelmiux/dev-branch
+    
+    Initial Merge
+
+commit 89117660efaf113af762c5c43cd8092439602d2a
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:50:45 2015 -0500
+
+    Update README.md
+
+commit 2c169b367b00eeecd743a3f34cb57e33a82818a4
+Author: nelmiux <npererar@utexas.edu>
+Date:   Thu Oct 15 18:39:30 2015 -0500
+
+    Initial makefile
+
+commit 5874aefd63740dc08b19548851942f8f280be844
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:36:27 2015 -0500
+
+    Update .travis.yml
+
+commit 1dddf76e2818c1029d831db3ebef081b52809b05
+Author: nelmiux <npererar@utexas.edu>
+Date:   Thu Oct 15 18:32:33 2015 -0500
+
+    Initial makefile
+
+commit 33ff18ac6d5aad75bae26ef80e07309ae1640a1b
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 13:44:30 2015 -0500
+
+    Update README.md
+
+commit 8ff0509b77a0160e2428d229e1b075cebca18ca1
+Author: nelmiux <npererar@utexas.edu>
+Date:   Thu Oct 15 13:39:51 2015 -0500
+
+    Initial Commit
+
+commit 302ed88586daefc1ed6a170f2aa53a7bf1105011
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 12:37:34 2015 -0500
+
+    Create .travis.yml
+
+commit a7cdb04c1e2d18e7e7438e892e7cbdd289fda9b9
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 12:35:49 2015 -0500
+
+    Create .gitignore
+
+commit 10d17608cc76ddc52faef0bf3eb8d209dd524312
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Wed Oct 14 21:52:19 2015 -0500
+
+    Initial commit
