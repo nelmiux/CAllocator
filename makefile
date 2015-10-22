@@ -1,7 +1,7 @@
 FILES :=                              \
     .travis.yml                       \
-    #allocator-tests/np8259-TestAllocator.c++ \
-    #allocator-tests/np8259-TestAllocator.out \
+    allocator-tests/np8259-TestAllocator.c++ \
+    allocator-tests/np8259-TestAllocator.out \
     Allocator.h                         \
     Allocator.log                       \
     html                              \
