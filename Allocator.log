@@ -1,3 +1,24 @@
+commit 72b403b974d28ab7e1dd7a2da1d53cd74de9446e
+Merge: 3b006cb 37dda59
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Wed Oct 21 19:08:37 2015 -0500
+
+    Merge pull request #19 from nelmiux/dev-branch
+    
+    Final Merge
+
+commit 37dda590a724fd380e02f747007985687c2476b5
+Author: nelmiux <npererar@utexas.edu>
+Date:   Wed Oct 21 19:02:02 2015 -0500
+
+    closes #12
+
+commit dd2ab8568136e51341115cecc7f0e0b93076371f
+Author: nelmiux <npererar@utexas.edu>
+Date:   Sat Oct 17 04:11:00 2015 -0500
+
+    closes #9
+
 commit 8c7f74932791399ec31ad223f26728916fdac1e2
 Author: nelmiux <npererar@utexas.edu>
 Date:   Sat Oct 17 04:07:08 2015 -0500
@@ -33,6 +54,21 @@ Author: nelmiux <npererar@utexas.edu>
 Date:   Fri Oct 16 20:29:11 2015 -0500
 
     closes #16, #17
+
+commit 3b006cbb0542a442a6495a6be2e387aeed02608b
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:53:17 2015 -0500
+
+    Update README.md
+
+commit 3fdfa475ffe55dee7437026f9d6ca34b420129b9
+Merge: 33ff18a 8911766
+Author: Nelma Perera <npererar@utexas.edu>
+Date:   Thu Oct 15 18:52:47 2015 -0500
+
+    Merge pull request #13 from nelmiux/dev-branch
+    
+    Initial Merge
 
 commit 89117660efaf113af762c5c43cd8092439602d2a
 Author: Nelma Perera <npererar@utexas.edu>
