@@ -62,9 +62,6 @@ status:
 
 test: TestAllocator.out
 
-allocator-tests:
-	git clone https://github.com/cs371p-fall-2015/allocator-tests.git
-
 html: Doxyfile Allocator.h TestAllocator.c++
 	doxygen Doxyfile
 
